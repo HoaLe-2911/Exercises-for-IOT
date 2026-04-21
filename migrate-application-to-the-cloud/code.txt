@@ -1,0 +1,37 @@
+import logging
+import json
+import azure.functions as func
+from azure.iot.hub import IoTHubRegistryManager
+from azure.iot.hub.models import CloudToDeviceMethod
+
+# Constants from Lesson 3 Calibration
+TARGET_MOISTURE = 500
+AVG_DECREASE_PER_SEC = 23
+DEVICE_ID = "soil-moisture-sensor-01"
+CONNECTION_STRING = "<AZURE_IOT_HUB_REGISTRY_CONNECTION_STRING>"
+
+def main(event: func.EventHubEvent):
+    body = event.get_body().decode('utf-8')
+    logging.info(f"Received event: {body}")
+    telemetry = json.loads(body)
+
+    if "soil_moisture" in telemetry:
+        current_moisture = telemetry["soil_moisture"]
+        
+        if current_moisture > TARGET_MOISTURE:
+            # Calculate watering duration
+            diff = current_moisture - TARGET_MOISTURE
+            pump_time = round(diff / AVG_DECREASE_PER_SEC, 1)
+            logging.info(f"Moisture low. Calculated pump time: {pump_time}s")
+
+            # Send Direct Method to Device
+            try:
+                registry_manager = IoTHubRegistryManager(CONNECTION_STRING)
+                method_payload = CloudToDeviceMethod(
+                    method_name="control_pump", 
+                    payload={"duration": pump_time}
+                )
+                registry_manager.invoke_device_method(DEVICE_ID, method_payload)
+                logging.info("Direct method 'control_pump' invoked successfully.")
+            except Exception as e:
+                logging.error(f"Failed to send direct method: {e}")

@@ -1,0 +1,11 @@
+[14:05:22] Server is running and waiting for moisture data via MQTT...
+[14:05:25] Received telemetry: {"soil_moisture": 720}
+[14:05:25] -> Analysis: Soil is dry (Target: 500). 
+[14:05:25] -> Calculation: Need to decrease by 220 units. Estimated pump time = 220 / 23 = 9.6 seconds.
+[14:05:25] -> ACTION: Sending PUMP ON command {"relay_1": 1}
+[14:05:25] -> Watering... (Sleeping for 9.6s)
+[14:05:34] -> ACTION: Sending PUMP OFF command {"relay_1": 0}
+[14:05:40] Received telemetry: {"soil_moisture": 496}
+[14:05:40] -> Analysis: Moisture reached target. System on standby.
+[14:05:50] Received telemetry: {"soil_moisture": 498}
+[14:05:50] -> Analysis: Moisture reached target. System on standby.

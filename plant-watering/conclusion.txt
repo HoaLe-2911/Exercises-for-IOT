@@ -1,0 +1,2 @@
+conclusion
+Transitioning from a fixed-duration watering cycle to a Dynamic Timing approach allows the system to accurately respond to actual soil conditions. If the soil is very dry (e.g., at the start of the day), the pump runs longer (9.6s). If the soil is only slightly dry, the pump may only run for 1-2 seconds. This optimization significantly saves water and prevents root rot caused by overwatering.
